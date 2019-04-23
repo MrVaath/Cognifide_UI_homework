@@ -11,8 +11,10 @@ const controlImages = async () => {
     // Search for images
     await images.getImages();
 
-    // Render resultson UI
+    // Render results on UI
+    clearLoader();
     imagesView.renderResults(images.result);
+    // console.log(images.result[0].site);
   } catch (error) {
     console.log(error);
   }

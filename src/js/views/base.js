@@ -1,5 +1,5 @@
 export const elements = {
-  images: document.querySelector('.flexbin')
+  images: document.querySelector('.gallery')
 };
 
 export const elementStrings = {
@@ -8,9 +8,11 @@ export const elementStrings = {
 
 export const renderLoader = parent => {
   const loader = `
-    <div class="${elementStrings.loader}"></div>
+    <div class="${
+      elementStrings.loader
+    }"><div></div><div></div><div></div><div></div></div>
   `;
-  parent.insertAdjacentHTML('afterbegin', loader);
+  parent.insertAdjacentHTML('beforebegin', loader);
 };
 
 export const clearLoader = () => {
