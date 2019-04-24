@@ -5,16 +5,22 @@ import { elements, renderLoader, clearLoader } from './views/base';
 const controlImages = async () => {
   const images = new Images();
   try {
-    // Prepare UI forresults
+    // Prepare UI for results
     renderLoader(elements.images);
 
     // Search for images
     await images.getImages();
 
-    // Render results on UI
+    // Create copy of all images
+    const allImages = images.result.slice();
+
+    // Render results on UI - 10 elements
     clearLoader();
-    imagesView.renderResults(images.result);
-    // console.log(images.result[0].site);
+    imagesView.renderResults(allImages);
+    imagesView.renderFillters(allImages);
+
+    // Render more results after clicking the button
+    imagesView.renderMore(allImages);
   } catch (error) {
     console.log(error);
   }
