@@ -14,13 +14,14 @@ const controlImages = async () => {
     // Create copy of all images
     const allImages = images.result.slice();
 
-    // Render results on UI - 10 elements
+    // Render results on UI - 10 elements and render fillters (nav)
     clearLoader();
     imagesView.renderResults(allImages);
-    imagesView.renderFillters(allImages);
+    imagesView.renderFilters(allImages);
 
     // Render more results after clicking the button
     imagesView.renderMore(allImages);
+    imagesView.renderByFilter(allImages);
   } catch (error) {
     console.log(error);
   }
