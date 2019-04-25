@@ -27,3 +27,11 @@ export const clearLoader = () => {
 export const toggleButton = toggle => {
   elements.button.hidden = toggle;
 };
+
+export const loadingButton = () => {
+  elements.button.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
+};
+
+export const clearLoadingButton = () => {
+  elements.button.innerHTML = `<span>Show more</span>`;
+};

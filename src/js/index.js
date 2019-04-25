@@ -6,12 +6,12 @@ import { elements, renderLoader, clearLoader } from './views/base';
 const images = new Images();
 
 const controlImages = async () => {
-  // Prepare UI for results
+  // Prepare UI for results - clearing and displaing loader
   imagesView.clearImage();
   renderLoader(elements.images);
 
   try {
-    // Get images data
+    // Try to get images data
     await images.getImages();
 
     // Create copy of all images
@@ -22,7 +22,7 @@ const controlImages = async () => {
     imagesView.renderResults(images.result);
     imagesView.renderFilters(allImages);
 
-    // Render results by filters
+    // Render results by filters - click listener
     imagesView.allFilters.forEach(element => {
       document.querySelector(`.${element}`).addEventListener('click', () => {
         imagesView.renderByFilter(allImages, element);
@@ -33,6 +33,7 @@ const controlImages = async () => {
   }
 };
 
+// Function to display large img
 document.querySelector('.gallery').addEventListener('click', event => {
   const imageObj = event.target.closest('.gallery__image');
   let imageURL =
@@ -42,4 +43,5 @@ document.querySelector('.gallery').addEventListener('click', event => {
   imagesView.renderLargeImage(imageURL);
 });
 
+// Initialization
 controlImages();
