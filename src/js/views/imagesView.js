@@ -101,6 +101,7 @@ export const renderResults = images => {
       // Check if is it a 5 or 9 picture to create large object (add different class)
       if (start % 10 === 4 || start % 10 === 8) {
         renderImage(newImages[start], true);
+        // Check if is it a 8 or 10 picture to add mobile class (fix displaying on small screen)
       } else if (start % 10 === 7 || start % 10 === 9) {
         renderImage(newImages[start], false);
         document
