@@ -1,8 +1,9 @@
 export const elements = {
   images: document.querySelector('.gallery'),
+  headerButton: document.querySelector('.header__btn'),
   parentButton: document.querySelector('.more-btn'),
-  button: document.querySelector('.more-btn__btn'),
-  fillters: document.querySelector('.header__fillters')
+  button: document.querySelector('.more-btn__btn')
+  // fillters: document.querySelector('.header__fillters')
 };
 
 export const elementStrings = {
@@ -23,7 +24,6 @@ export const clearLoader = () => {
   if (loader) loader.parentElement.removeChild(loader);
 };
 
-export const clearButton = () => {
-  const button = elements.parentButton;
-  if (button) button.parentElement.removeChild(button);
+export const toggleButton = toggle => {
+  elements.button.hidden = toggle;
 };

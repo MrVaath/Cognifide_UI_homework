@@ -1,54 +1,67 @@
-import { elements, clearButton } from './base';
+import { elements, toggleButton } from './base';
 
-var limit = 10;
-var start = 0;
-var allFilters;
+let limit, start, cutFilters, newImages;
+export let allFilters;
+start = 0;
+limit = 10;
 
-export const renderFilter = filter => {
-  const markup = `
-    <button class="header__btn ${filter}">${filter}</button>
-  `;
-  elements.fillters.insertAdjacentHTML('beforeend', markup);
-};
+// DYNAMIC CODE FOR RENDERING FILTER FROM IMAGE OBJECT
+// export const renderFilter = filter => {
+//   const filterHTML = `
+//     <button class="header__btn ${filter}">${filter}</button>
+//   `;
+//   elements.fillters.insertAdjacentHTML('beforeend', filterHTML);
+// };
 
+// FILTERS
 export const renderFilters = images => {
-  const filters = [];
-  for (let i = 0; i < images.length; i++) {
-    filters[i] = images[i].site;
-  }
-  allFilters = [...new Set(filters)];
-  allFilters.forEach(renderFilter);
+  // Create temp array
+  let filters = [];
+
+  // Push all filters from image to this Array
+  images.forEach(element => {
+    filters.push(element.site);
+  });
+
+  // Delete repeating elements and push it to the new Array
+  cutFilters = [...new Set(filters)];
+
+  // Render all filter
+  // cutFilters.forEach(renderFilter);
+
+  // Create Array with all filters
+  allFilters = ['showall', ...cutFilters];
 };
 
+// IMAGES
 export const renderImage = (image, large) => {
   if (large) {
-    const markup = `
-      <a class="gallery__image gallery__image--large" data-type=${
-        image.site
-      } href="#${image.large_url}">
+    const imageLarge = `
+      <a class="gallery__image gallery__image--large" href="#${image.id}">
       <div class="overlay">
         <div class="text--large">#${image.site}</div>
       </div>
         <img src="${image.url}" alt="${image.site}" />
       </a>
     `;
-    elements.images.insertAdjacentHTML('beforeend', markup);
+    elements.images.insertAdjacentHTML('beforeend', imageLarge);
   } else {
-    const markup = `
-      <a class="gallery__image gallery__image--small" data-type=${
-        image.site
-      } href="#${image.large_url}">
+    const imageSmall = `
+      <a class="gallery__image gallery__image--small" href="#${image.id}">
       <div class="overlay">
         <div class="text--small">#${image.site}</div>
       </div>
         <img src="${image.url}" alt="${image.site}" />
       </a>
     `;
-    elements.images.insertAdjacentHTML('beforeend', markup);
+    elements.images.insertAdjacentHTML('beforeend', imageSmall);
   }
 };
 
+export const renderLargeImage = image => {};
+
 export const renderResults = images => {
+  toggleButton(false);
   if (limit < images.length) {
     for (start; start < limit; start++) {
       if (start % 10 === 4 || start % 10 === 8) {
@@ -65,40 +78,48 @@ export const renderResults = images => {
         renderImage(images[start], false);
       }
     }
-    clearButton();
+    toggleButton(true);
   }
 };
 
-export const renderMore = images => {
-  elements.button.addEventListener('click', () => {
-    limit += 10;
-    renderResults(images);
-  });
-};
-
-export const renderByFilter = images => {
-  // Show all
-  document.querySelector(`.header__btn`).addEventListener('click', () => {
-    renderResults(images);
-  });
-
+export const renderByFilter = (images, filter) => {
   // Show by filters
-  for (let i = 0; i < allFilters.length; i++) {
-    // const newImages = [];
-    document
-      .querySelector(`.${allFilters[i]}`)
-      .addEventListener('click', () => {
-        // for (let j = 0; j < images.length; j++) {
-        //   if (images[j].site === allFillters[i]) {
-        //     newImages.push(images[j]);
-        //   }
-        // }
-        // console.log(newImages);
-
-        // limit = 10;
-        // start = 0;
-        // renderResults(newImages);
-        console.log(`działa ${allFilters[i]}`);
-      });
+  newImages = [];
+  start = 0;
+  limit = 10;
+  changeActive(allFilters, filter);
+  clearImage();
+  for (let i = 0; i < images.length; i++) {
+    if (images[i].site === filter) {
+      newImages.push(images[i]);
+    }
   }
+  renderResults(newImages);
+};
+
+// Button
+elements.button.addEventListener('click', () => {
+  limit += 10;
+  renderMore(newImages);
+});
+
+// Show more button
+export const renderMore = images => {
+  // limit += 10;
+  renderResults(images);
+};
+
+// Clear all gallery
+export const clearImage = () => {
+  elements.images.innerHTML = '';
+};
+
+// Change active page - css
+const changeActive = (filters, filter) => {
+  filters.forEach(element => {
+    if (document.querySelector(`.${element}`).classList.contains('active')) {
+      document.querySelector(`.${element}`).classList.remove('active');
+    }
+    document.querySelector(`.${filter}`).classList.add('active');
+  });
 };
