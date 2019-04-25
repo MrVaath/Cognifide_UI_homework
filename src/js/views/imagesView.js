@@ -38,7 +38,8 @@ export const renderImage = (image, large) => {
   if (large) {
     const imageLarge = `
       <a class="gallery__image gallery__image--large" id="${image.id}" href="#${
-      image.large_url
+      image.id
+    }" data-large="${image.large_url}"
     }">
       <div class="overlay">
         <div class="text--large">#${image.site}</div>
@@ -50,7 +51,8 @@ export const renderImage = (image, large) => {
   } else {
     const imageSmall = `
       <a class="gallery__image gallery__image--small" id="${image.id}" href="#${
-      image.large_url
+      image.id
+    }" data-large="${image.large_url}"
     }">
       <div class="overlay">
         <div class="text--small">#${image.site}</div>
@@ -62,49 +64,42 @@ export const renderImage = (image, large) => {
   }
 };
 
-export const renderLargeImage = id => {
+export const renderLargeImage = url => {
   const largeImage = `
-    <div id="myModal" class="modal">
+    <div class="modal">
       <span class="close">&times;</span>
-      <img class="modal-content" id="${id}">
+      <img class="modal-content" src="${url}">
     </div>
   `;
   elements.images.insertAdjacentHTML('beforeend', largeImage);
 
-  var modal = document.getElementById('myModal');
-  var a = document.getElementById(`${id}`);
-  var modalImg = document.getElementById(`${id}`);
-  a.onclick = function() {
-    modal.style.display = 'block';
-    modalImg.src = this.src;
-  };
-
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName('close')[0];
+  document.querySelector('.modal').addEventListener('click', event => {
+    event.stopPropagation();
+  });
 
   // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
-    modal.style.display = 'none';
-  };
+  document.querySelector('.close').addEventListener('click', function() {
+    this.parentElement.remove();
+  });
 };
 
 export const renderResults = images => {
   newImages = images;
   toggleButton(false);
-  if (limit < images.length) {
+  if (limit < newImages.length) {
     for (start; start < limit; start++) {
       if (start % 10 === 4 || start % 10 === 8) {
-        renderImage(images[start], true);
+        renderImage(newImages[start], true);
       } else {
-        renderImage(images[start], false);
+        renderImage(newImages[start], false);
       }
     }
   } else {
-    for (start; start < images.length; start++) {
+    for (start; start < newImages.length; start++) {
       if (start % 10 === 4 || start % 10 === 8) {
-        renderImage(images[start], true);
+        renderImage(newImages[start], true);
       } else {
-        renderImage(images[start], false);
+        renderImage(newImages[start], false);
       }
     }
     toggleButton(true);

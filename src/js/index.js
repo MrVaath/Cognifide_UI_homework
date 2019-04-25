@@ -34,11 +34,12 @@ const controlImages = async () => {
 };
 
 document.querySelector('.gallery').addEventListener('click', event => {
-  // console.log(event.target.closest('.gallery__image'));
-  const id = event.target.closest('.gallery__image').id;
-  console.log(id);
-
-  imagesView.renderLargeImage(id);
+  const imageObj = event.target.closest('.gallery__image');
+  let imageURL =
+    imageObj.dataset.large !== 'null'
+      ? imageObj.dataset.large
+      : imageObj.children[1].src;
+  imagesView.renderLargeImage(imageURL);
 });
 
 controlImages();
