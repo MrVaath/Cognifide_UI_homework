@@ -93,6 +93,7 @@ export const renderLargeImage = url => {
 
 // Render all pictures/images function
 export const renderResults = images => {
+  newImages = [];
   newImages = images;
   toggleButton(false);
   if (limit < newImages.length) {
@@ -100,6 +101,11 @@ export const renderResults = images => {
       // Check if is it a 5 or 9 picture to create large object (add different class)
       if (start % 10 === 4 || start % 10 === 8) {
         renderImage(newImages[start], true);
+      } else if (start % 10 === 7 || start % 10 === 9) {
+        renderImage(newImages[start], false);
+        document
+          .getElementById(`${newImages[start].id}`)
+          .classList.add('mobile');
       } else {
         renderImage(newImages[start], false);
       }
@@ -108,6 +114,11 @@ export const renderResults = images => {
     for (start; start < newImages.length; start++) {
       if (start % 10 === 4 || start % 10 === 8) {
         renderImage(newImages[start], true);
+      } else if (start % 10 === 7 || start % 10 === 9) {
+        renderImage(newImages[start], false);
+        document
+          .getElementById(`${newImages[start].id}`)
+          .classList.add('mobile');
       } else {
         renderImage(newImages[start], false);
       }

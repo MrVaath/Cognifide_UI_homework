@@ -321,13 +321,11 @@ body {
     flex-basis: 50%;
   }
 
-  .gallery__image--small:nth-child(8n),
-  .gallery__image--small:nth-child(10n) {
+  .mobile {
     flex-basis: 100%;
   }
 
-  .gallery__image--small:nth-child(8n) > img,
-  .gallery__image--small:nth-child(10n) > img {
+  .mobile > img {
     height: 300px;
   }
 
