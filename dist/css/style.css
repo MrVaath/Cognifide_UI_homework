@@ -29,6 +29,30 @@ body {
   text-align: center;
 }
 
+.header__fillters {
+  text-align: center;
+}
+
+.header__btn {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  background-color: #ffffff;
+  color: #077187;
+  border: 1px solid #077187;
+  border-radius: 20px;
+  padding: 5px 25px;
+}
+
+.header__btn:hover {
+  background-color: #074147;
+  color: #ffffff;
+}
+
+.active {
+  background-color: #077187;
+  color: #ffffff;
+}
+
 /* GALLERY */
 .gallery {
   display: flex;
@@ -96,30 +120,98 @@ body {
   flex-basis: 25%;
 }
 
+/* MODAL */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (image) */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+/* Add Animation */
+.modal-content,
+#caption {
+  -webkit-animation-name: zoom;
+  -webkit-animation-duration: 0.6s;
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+  from {
+    -webkit-transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes zoom {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* The Close Button */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px) {
+  .modal-content {
+    width: 100%;
+  }
+}
+
 /* BUTTON */
-.header__fillters {
-  text-align: center;
-}
-
-.header__btn {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 20px;
-  background-color: #ffffff;
-  color: #077187;
-  border: 1px solid #077187;
-  border-radius: 20px;
-  padding: 5px 25px;
-}
-
-.header__btn:hover {
-  background-color: #074147;
-  color: #ffffff;
-}
-
-.active {
-  background-color: #077187;
-  color: #ffffff;
-}
 
 .more-btn {
   display: flex;
@@ -161,6 +253,21 @@ body {
     padding: 10px;
   }
 
+  .gallery__image .overlay {
+    top: 10px;
+    right: 10px;
+    bottom: 14px;
+    left: 10px;
+  }
+
+  .text--small {
+    font-size: 20px;
+  }
+
+  .text--large {
+    font-size: 40px;
+  }
+
   .gallery__image > img {
     height: 150px;
   }
@@ -199,6 +306,21 @@ body {
 
   .gallery__image {
     padding: 5px;
+  }
+
+  .gallery__image .overlay {
+    top: 5px;
+    right: 5px;
+    bottom: 9px;
+    left: 5px;
+  }
+
+  .text--small {
+    font-size: 15px;
+  }
+
+  .text--large {
+    font-size: 30px;
   }
 
   .gallery__image > img {

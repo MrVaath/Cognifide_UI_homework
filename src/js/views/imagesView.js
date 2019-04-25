@@ -37,7 +37,9 @@ export const renderFilters = images => {
 export const renderImage = (image, large) => {
   if (large) {
     const imageLarge = `
-      <a class="gallery__image gallery__image--large" href="#${image.id}">
+      <a class="gallery__image gallery__image--large" id="${image.id}" href="#${
+      image.large_url
+    }">
       <div class="overlay">
         <div class="text--large">#${image.site}</div>
       </div>
@@ -47,7 +49,9 @@ export const renderImage = (image, large) => {
     elements.images.insertAdjacentHTML('beforeend', imageLarge);
   } else {
     const imageSmall = `
-      <a class="gallery__image gallery__image--small" href="#${image.id}">
+      <a class="gallery__image gallery__image--small" id="${image.id}" href="#${
+      image.large_url
+    }">
       <div class="overlay">
         <div class="text--small">#${image.site}</div>
       </div>
@@ -58,9 +62,34 @@ export const renderImage = (image, large) => {
   }
 };
 
-export const renderLargeImage = image => {};
+export const renderLargeImage = id => {
+  const largeImage = `
+    <div id="myModal" class="modal">
+      <span class="close">&times;</span>
+      <img class="modal-content" id="${id}">
+    </div>
+  `;
+  elements.images.insertAdjacentHTML('beforeend', largeImage);
+
+  var modal = document.getElementById('myModal');
+  var a = document.getElementById(`${id}`);
+  var modalImg = document.getElementById(`${id}`);
+  a.onclick = function() {
+    modal.style.display = 'block';
+    modalImg.src = this.src;
+  };
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName('close')[0];
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = 'none';
+  };
+};
 
 export const renderResults = images => {
+  newImages = images;
   toggleButton(false);
   if (limit < images.length) {
     for (start; start < limit; start++) {
@@ -89,23 +118,27 @@ export const renderByFilter = (images, filter) => {
   limit = 10;
   changeActive(allFilters, filter);
   clearImage();
-  for (let i = 0; i < images.length; i++) {
-    if (images[i].site === filter) {
-      newImages.push(images[i]);
+  if (filter === 'showall') {
+    newImages = images;
+    renderResults(newImages);
+  } else {
+    for (let i = 0; i < images.length; i++) {
+      if (images[i].site === filter) {
+        newImages.push(images[i]);
+      }
     }
+    renderResults(newImages);
   }
-  renderResults(newImages);
 };
 
 // Button
 elements.button.addEventListener('click', () => {
-  limit += 10;
   renderMore(newImages);
 });
 
 // Show more button
 export const renderMore = images => {
-  // limit += 10;
+  limit += 10;
   renderResults(images);
 };
 

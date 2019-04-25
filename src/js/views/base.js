@@ -1,6 +1,6 @@
 export const elements = {
   images: document.querySelector('.gallery'),
-  headerButton: document.querySelector('.header__btn'),
+  showAll: document.querySelector('.showall'),
   parentButton: document.querySelector('.more-btn'),
   button: document.querySelector('.more-btn__btn')
   // fillters: document.querySelector('.header__fillters')

@@ -23,12 +23,6 @@ const controlImages = async () => {
     imagesView.renderFilters(allImages);
 
     // Render results by filters
-    // All
-    elements.headerButton.addEventListener('click', () => {
-      imagesView.renderResults(allImages);
-    });
-
-    // Other filters
     imagesView.allFilters.forEach(element => {
       document.querySelector(`.${element}`).addEventListener('click', () => {
         imagesView.renderByFilter(allImages, element);
@@ -39,15 +33,12 @@ const controlImages = async () => {
   }
 };
 
-const test = () => {
-  // Get ID from url
-  const id = window.location.hash.replace('#', '');
-  console.log(`ID: ${id}`);
-};
+document.querySelector('.gallery').addEventListener('click', event => {
+  // console.log(event.target.closest('.gallery__image'));
+  const id = event.target.closest('.gallery__image').id;
+  console.log(id);
+
+  imagesView.renderLargeImage(id);
+});
 
 controlImages();
-
-document.querySelector('.gallery').addEventListener('click', event => {
-  console.log(event.target.closest('.gallery__image'));
-  console.log('działa');
-});
