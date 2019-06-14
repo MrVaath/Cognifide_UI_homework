@@ -51,4 +51,5 @@ $ npm install
 
 ![alt tag](https://github.com/MrVaath/Cognifide_UI_homework/blob/master/dist/img/result.png)
 
-> _Language: JavaScript_ <br> > _Year: 2019_
+> _Language: JavaScript_ <br>
+> _Year: 2019_
