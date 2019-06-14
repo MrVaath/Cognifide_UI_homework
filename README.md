@@ -15,7 +15,7 @@ A project created as part of 'Cognifide' recruitment
 ## Additionial
 
 - Accessibility and responsiveness
-- Correct typography ([Montserrat font](https://fonts.google.com/specimen/Montserrat) for body copy, [Allura font](https://fonts.google.com/specimen/Allura) for heading text
+- Correct typography ([Montserrat font](https://fonts.google.com/specimen/Montserrat) for body copy, [Allura font](https://fonts.google.com/specimen/Allura) for heading text)
 - The gallery work as a Single Page Application (no reload on user interactions)
 
 ## Installation
@@ -51,4 +51,4 @@ $ npm install
 
 ![alt tag](https://github.com/MrVaath/Cognifide_UI_homework/blob/master/dist/img/result.png)
 
-> _Language: JavaScript_ <br> >_Year: 2019_
+> _Language: JavaScript_ <br> > _Year: 2019_
