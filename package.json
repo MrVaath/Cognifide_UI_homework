@@ -1,7 +1,6 @@
 {
-  "name": "homework",
-  "version": "1.0.0",
-  "description": "",
+  "name": "photo-gallery",
+  "version": "2.0.0",
   "main": "index.js",
   "scripts": {
     "dev": "webpack --mode development",
@@ -10,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MrVaath/Cognifide_UI_homework"
+    "url": "git+https://github.com/MrVaath/Photo-Gallery"
   },
   "author": "Patryk Wylegala",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MrVaath/Cognifide_UI_homework/issues"
+    "url": "https://github.com/MrVaath/Photo-Gallery/issues"
   },
-  "homepage": "https://github.com/MrVaath/Cognifide_UI_homework#readme",
+  "homepage": "https://github.com/MrVaath/Photo-Gallery#readme",
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
