@@ -14,7 +14,7 @@ export default class Image {
   async getImages() {
     try {
       const res = await axios(
-        `http://www.splashbase.co/api/v1/images/search?query=tree`
+        `https://www.splashbase.co/api/v1/images/search?query=tree`
       );
 
       this.result = res.data.images;
