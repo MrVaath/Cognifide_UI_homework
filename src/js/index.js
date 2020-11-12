@@ -1,11 +1,19 @@
+// IMPORTS //
 import Images from './models/Images';
 import * as imagesView from './views/images';
 import * as loaderView from './views/loader';
 import * as filtersView from './views/filters';
 
-// Create new images object
+// VARIABLES //
+/**
+ * Create new images object
+ */
 const images = new Images();
 
+// FUNCTIONS //
+/**
+ * Get all images from api and renders results on UI
+ */
 const controlImages = async () => {
   // Prepare UI for results - clearing and displaing loader
   imagesView.clearImage();
@@ -16,7 +24,7 @@ const controlImages = async () => {
     await images.getImages();
 
     // Create copy of all images
-    const allImages = images.result.slice();
+    const allImages = images && images.result ? images.result.slice() : [];
 
     // Renders results on UI - 10 images and fillters (nav)
     imagesView.saveImages(allImages);
@@ -24,7 +32,7 @@ const controlImages = async () => {
     filtersView.renderFilters(allImages);
     loaderView.clearLoader();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 

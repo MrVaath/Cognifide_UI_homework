@@ -1,10 +1,16 @@
+// IMPORTS //
 import axios from 'axios';
 
-// Class image, where can I keep some data, like id, url etc and use different functions
+/**
+ * Image class, where can I keep some data, like id, url etc. and use different functions
+ */
 export default class Image {
   constructor() {}
 
-  // Try to get all images from api
+  // FUNCTIONS //
+  /**
+   * Get all images from api
+   */
   async getImages() {
     try {
       const res = await axios(
@@ -13,7 +19,7 @@ export default class Image {
 
       this.result = res.data.images;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 }
