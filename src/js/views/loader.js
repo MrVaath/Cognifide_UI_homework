@@ -1,5 +1,5 @@
 // IMPORTS //
-import { images, button } from './images';
+import { gallery, showMoreButton } from './images';
 
 // VARIABLES //
 /**
@@ -21,7 +21,7 @@ export const renderLoader = () => {
     </div>
   `;
 
-  images.insertAdjacentHTML('beforeend', loader);
+  gallery.insertAdjacentHTML('beforeend', loader);
 };
 
 /**
@@ -39,12 +39,12 @@ export const clearLoader = () => {
  * Change button to loading state (render loading)
  */
 export const loadingButton = () => {
-  button.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
+  showMoreButton.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
 };
 
 /**
  * Change button to default state (clear loading)
  */
 export const clearLoadingButton = () => {
-  button.innerHTML = `<span>Show more</span>`;
+  showMoreButton.innerHTML = `<span>Show more</span>`;
 };

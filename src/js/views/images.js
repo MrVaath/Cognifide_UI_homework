@@ -1,11 +1,12 @@
 // IMPORTS //
+import * as filtersView from './filters';
 import * as loaderView from './loader';
 
 // VARIABLES //
 /**
- * Store all images
+ * Store all images separated by filters
  */
-let allImages = [];
+let allImages = {};
 
 /**
  * Store only displayed images
@@ -30,49 +31,34 @@ const container = document.querySelector('.container');
 /**
  * Gallery element
  */
-export const images = document.querySelector('.gallery');
+export const gallery = document.querySelector('.gallery');
+
+/**
+ * Show more container
+ */
+const showMoreContainer = document.querySelector('.show-more');
 
 /**
  * Show more button element
  */
-export const button = document.querySelector('.show-more__button');
+export const showMoreButton = document.querySelector('.show-more__button');
 
 // FUNCTIONS //
 /**
- * Save all images to the system
+ * Save all images to the system, render them and available filters and set listeners
  * @param {{ id: number, url: string, large_url: string, source_id: number, copyright: string, site: string }[]} images An array that stores objects with images
  * @example
  * saveImages([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
  */
-export const saveImages = (images) => {
-  allImages = images;
+export const onInitialized = (images) => {
+  allImages.showall = images;
   displayedImages = images;
-};
 
-/**
- * Render the images transferred in the function
- * @param {{ id: number, url: string, large_url: string, source_id: number, copyright: string, site: string }[]} images An array that stores objects with images
- * @example
- * renderImages([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
- */
-export const renderImages = (images) => {
-  const newLimit = limit < images.length ? limit : images.length;
+  renderImages(images);
+  filtersView.renderFilters(images);
 
-  newLimit === images.length ? toggleButton(true) : toggleButton(false);
-
-  for (start; start < newLimit; start++) {
-    // Check if is it a 5 or 9 picture to create large object (add different class)
-    if (start % 10 === 4 || start % 10 === 8) {
-      renderImage(images[start], 'large');
-    } else {
-      renderImage(images[start], 'small');
-
-      // Check if is it a 8 or 10 picture to add mobile class (fix displaying on small screen)
-      if (start % 10 === 7 || start % 10 === 9) {
-        document.getElementById(`${images[start].id}`).classList.add('mobile');
-      }
-    }
-  }
+  setModalClick();
+  setButtonClick();
 };
 
 /**
@@ -92,7 +78,35 @@ const renderImage = (image, imageSize) => {
     </div>
   `;
 
-  images.insertAdjacentHTML('beforeend', imageHTML);
+  gallery.insertAdjacentHTML('beforeend', imageHTML);
+};
+
+/**
+ * Render all images transferred in the function
+ * @param {{ id: number, url: string, large_url: string, source_id: number, copyright: string, site: string }[]} images An array that stores objects with images
+ * @example
+ * renderImages([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
+ */
+const renderImages = (images) => {
+  const newLimit = limit < images.length ? limit : images.length;
+
+  newLimit === images.length
+    ? isShowMoreButtonVisible(false)
+    : isShowMoreButtonVisible(true);
+
+  for (start; start < newLimit; start++) {
+    // Check if is it a 5 or 9 picture to create large object (add different class)
+    if (start % 10 === 4 || start % 10 === 8) {
+      renderImage(images[start], 'large');
+    } else {
+      renderImage(images[start], 'small');
+
+      // Check if is it a 8 or 10 picture to add mobile class (fix displaying on small screen)
+      if (start % 10 === 7 || start % 10 === 9) {
+        document.getElementById(`${images[start].id}`).classList.add('mobile');
+      }
+    }
+  }
 };
 
 /**
@@ -118,6 +132,21 @@ const renderImageModal = (imageSrc) => {
 };
 
 /**
+ * Set photos click listener - render modal with single image
+ */
+const setModalClick = () => {
+  gallery.addEventListener('click', (event) => {
+    const imageObj = event.target.closest('.gallery__image');
+    const imageURL =
+      imageObj.dataset.large !== 'null'
+        ? imageObj.dataset.large
+        : imageObj.children[1].src;
+
+    renderImageModal(imageURL);
+  });
+};
+
+/**
  * Render all images by filter transferred in the function
  * @param {string} filterName Specifies the name of the filter
  * @example
@@ -130,15 +159,13 @@ export const renderImagesByFilter = (filterName) => {
 
   clearImage();
 
-  if (filterName === 'showall') {
-    displayedImages = allImages;
-  } else {
-    allImages.forEach((image) => {
-      if (image.site === filterName) {
-        displayedImages.push(image);
-      }
-    });
+  if (!allImages[filterName]) {
+    allImages[filterName] = allImages.showall.filter(
+      (image) => image.site === filterName
+    );
   }
+
+  displayedImages = allImages[filterName];
 
   renderImages(displayedImages);
 };
@@ -157,35 +184,29 @@ const renderMoreImage = () => {
 };
 
 /**
- * Change button visibility
+ * Set show more button listener - render more images
+ */
+const setButtonClick = () => {
+  showMoreButton.addEventListener('click', () => {
+    renderMoreImage();
+  });
+};
+
+/**
+ * Change show more button visibility
  * @param {boolean} toggle Specifies button visibility
  * @example
- * toggleButton(false);
+ * isShowMoreButtonVisible(false);
  */
-const toggleButton = (toggle) => {
-  button.hidden = toggle;
+const isShowMoreButtonVisible = (toggle) => {
+  const displayedStyle = toggle ? 'flex' : 'none';
+
+  showMoreContainer.setAttribute('style', `display: ${displayedStyle};`);
 };
 
 /**
  * Clear all gallery results (images)
  */
 export const clearImage = () => {
-  images.innerHTML = '';
+  gallery.innerHTML = '';
 };
-
-// GLOBAL //
-// Gallery listener - render modal with single image
-images.addEventListener('click', (event) => {
-  const imageObj = event.target.closest('.gallery__image');
-  const imageURL =
-    imageObj.dataset.large !== 'null'
-      ? imageObj.dataset.large
-      : imageObj.children[1].src;
-
-  renderImageModal(imageURL);
-});
-
-// Show more button listener - render more images
-button.addEventListener('click', () => {
-  renderMoreImage();
-});

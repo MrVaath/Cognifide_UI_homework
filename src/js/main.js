@@ -2,7 +2,6 @@
 import Images from './models/Images';
 import * as imagesView from './views/images';
 import * as loaderView from './views/loader';
-import * as filtersView from './views/filters';
 
 // VARIABLES //
 /**
@@ -27,9 +26,7 @@ const controlImages = async () => {
     const allImages = images && images.result ? images.result.slice() : [];
 
     // Renders results on UI - 10 images and fillters (nav)
-    imagesView.saveImages(allImages);
-    imagesView.renderImages(allImages);
-    filtersView.renderFilters(allImages);
+    imagesView.onInitialized(allImages);
     loaderView.clearLoader();
   } catch (error) {
     console.error(error);

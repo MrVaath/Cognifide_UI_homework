@@ -2,19 +2,19 @@ const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: ['babel-polyfill', './src/js/index.js'],
+  entry: ['babel-polyfill', './src/js/main.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'js/bundle.js'
+    filename: 'js/bundle.js',
   },
   devServer: {
-    contentBase: './dist'
+    contentBase: './dist',
   },
   plugins: [
     new HTMLWebpackPlugin({
       filename: 'index.html',
-      template: './src/index.html'
-    })
+      template: './src/index.html',
+    }),
   ],
   module: {
     rules: [
@@ -22,9 +22,9 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
-        }
-      }
-    ]
-  }
+          loader: 'babel-loader',
+        },
+      },
+    ],
+  },
 };
