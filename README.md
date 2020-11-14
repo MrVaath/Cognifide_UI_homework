@@ -28,6 +28,8 @@ This project was created as part of 'Cognifide' recruitment. It is a simple webs
   - Filters (buttons in the navigation) are automatically rendered based on all available sites in the photos.
   - Modal can be closed by clicking button or outside container.
   - Transitions and some animations (zoom and scale).
+  - Added and configured webpack.
+  - Added preprocessor and converted css to scss.
 
 ## Additionial
 
@@ -79,6 +81,6 @@ Contact me via email
 
 **Language**: _HTML_, _CSS_, _JavaScript_
 
-**Version**: _2.0.0_
+**Version**: _3.0.1_
 
 **Year**: _2019_

@@ -2,6 +2,7 @@
 import Images from './models/Images';
 import * as imagesView from './views/images';
 import * as loaderView from './views/loader';
+import '../sass/style.scss';
 
 // VARIABLES //
 /**
