@@ -27,7 +27,7 @@ This project was created as part of 'Cognifide' recruitment. It is a simple webs
 - Invented by me:
   - Filters (buttons in the navigation) are automatically rendered based on all available sites in the photos.
   - Modal can be closed by clicking button or outside container.
-  - Transitions and some animations (zoom).
+  - Transitions and some animations (zoom and scale).
 
 ## Additionial
 

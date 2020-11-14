@@ -30,7 +30,7 @@ body {
   user-select: none;
 }
 
-/* HEADER - FILLTER */
+/* HEADER - FILTERS CONTAINER */
 .header__filters {
   position: relative;
 }
@@ -101,7 +101,7 @@ body {
   transform-origin: 50% 50%;
 }
 
-/* SINGLE IMAGE - OVERLAY */
+/* SINGLE IMAGE - OVERLAY CONTAINER */
 .image__overlay {
   display: flex;
   justify-content: center;
@@ -153,21 +153,29 @@ body {
   height: 85%;
 }
 
-/* MODAL - CLOSE BUTTON */
+/* MODAL - CLOSE CONTAINER */
 .modal__close {
   display: flex;
   justify-content: end;
   align-items: center;
-  color: #f1f1f1;
-  font-size: 55px;
   z-index: 200;
-  font-weight: bold;
   width: 95%;
   height: 5%;
+}
+
+/* CLOSE - BUTTON */
+.close__button {
+  color: #f1f1f1;
+  font-size: 30px;
+  font-weight: bold;
+  background-color: inherit;
+  border: none;
+  outline: none;
+  padding: 0 5px 0 0;
   transition: color 0.4s linear;
 }
 
-.modal__close:hover {
+.close__button:hover {
   color: #077187;
   cursor: pointer;
 }

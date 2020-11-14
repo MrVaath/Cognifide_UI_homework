@@ -6,12 +6,12 @@ import * as loaderView from './loader';
 /**
  * Store all images separated by filters
  */
-let allImages = {};
+const allImages = {};
 
 /**
- * Store only displayed images
+ * Specifies the name of the active filter
  */
-let displayedImages = [];
+let activeFilter;
 
 /**
  * Specifies where to start rendering images
@@ -51,8 +51,8 @@ export const showMoreButton = document.querySelector('.show-more__button');
  * saveImages([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
  */
 export const onInitialized = (images) => {
-  allImages.showall = images;
-  displayedImages = images;
+  activeFilter = 'showall';
+  allImages[activeFilter] = images;
 
   renderImages(images);
   filtersView.renderFilters(images);
@@ -118,16 +118,19 @@ const renderImages = (images) => {
 const renderImageModal = (imageSrc) => {
   const imageModalHTML = `
     <div class="modal">
-      <span class="modal__close">&times;</span>
+      <div class="modal__close">
+        <button class="fas fa-times close__button"></button>
+      </div>
       <img class="modal__content" src="${imageSrc}">
     </div>
   `;
 
   container.insertAdjacentHTML('beforeend', imageModalHTML);
 
-  // When the user clicks on <span> (x), close the modal
-  document.querySelector('.modal__close').addEventListener('click', (event) => {
-    event.target.parentElement.remove();
+  document.querySelector('.modal').addEventListener('click', (event) => {
+    if (event.target.tagName !== 'IMG') {
+      event.target.closest('.modal').remove();
+    }
   });
 };
 
@@ -153,21 +156,19 @@ const setModalClick = () => {
  * renderImagesByFilter('littlevisuals');
  */
 export const renderImagesByFilter = (filterName) => {
-  displayedImages = [];
   start = 0;
   limit = 10;
 
-  clearImage();
+  activeFilter = filterName;
 
-  if (!allImages[filterName]) {
-    allImages[filterName] = allImages.showall.filter(
-      (image) => image.site === filterName
+  if (!allImages[activeFilter]) {
+    allImages[activeFilter] = allImages.showall.filter(
+      (image) => image.site === activeFilter
     );
   }
 
-  displayedImages = allImages[filterName];
-
-  renderImages(displayedImages);
+  clearImage();
+  renderImages(allImages[activeFilter]);
 };
 
 /**
@@ -178,7 +179,7 @@ const renderMoreImage = () => {
   loaderView.loadingButton();
 
   setTimeout(() => {
-    renderImages(displayedImages);
+    renderImages(allImages[activeFilter]);
     loaderView.clearLoadingButton();
   }, 500);
 };
