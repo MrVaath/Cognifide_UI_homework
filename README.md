@@ -69,7 +69,7 @@ Run `npm run build-prod` for a production build. The build artifacts will be sto
 
 ## Image
 
-![alt tag](https://github.com/MrVaath/Cognifide_UI_homework/blob/master/dist/img/result.png)
+![Photo Gallery](https://github.com/MrVaath/Cognifide_UI_homework/blob/master/assets/result.jpg)
 
 ## Support
 
