@@ -23,16 +23,22 @@ body {
 /* HEADER - TITLE */
 .header__title {
   position: relative;
-  top: 15px;
+  top: 18px;
   font-family: 'Allura', sans-serif;
   font-size: 7rem;
+  user-select: none;
 }
 
 /* HEADER - FILLTER */
+.header__filters {
+  position: relative;
+}
+
+/* FILTER - BUTTON */
 .filter__button {
   font-family: 'Montserrat', sans-serif;
   font-size: 20px;
-  background-color: #ffffff;
+  background-color: inherit;
   color: #077187;
   border: 1px solid #077187;
   border-radius: 20px;
@@ -140,13 +146,15 @@ body {
 
 /* MODAL - CLOSE BUTTON */
 .modal__close {
+  display: flex;
+  justify-content: end;
+  align-items: center;
   color: #f1f1f1;
   font-size: 55px;
   z-index: 200;
   font-weight: bold;
-  text-align: right;
   width: 95%;
-  height: 6%;
+  height: 5%;
   transition: color 0.4s linear;
 }
 
