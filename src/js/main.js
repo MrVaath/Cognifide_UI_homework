@@ -30,6 +30,9 @@ const controlImages = async () => {
     imagesView.onInitialized(allImages);
     loaderView.clearLoader();
   } catch (error) {
+    imagesView.onInitialized([]);
+    loaderView.clearLoader();
+
     console.error(error);
   }
 };

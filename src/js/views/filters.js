@@ -5,7 +5,7 @@ import * as imagesView from './images';
 /**
  * Header filters element
  */
-const filters = document.querySelector('.header__filters');
+export const filters = document.querySelector('.header__filters');
 
 // FUNCTIONS //
 /**

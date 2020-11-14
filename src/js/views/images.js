@@ -45,20 +45,24 @@ export const showMoreButton = document.querySelector('.show-more__button');
 
 // FUNCTIONS //
 /**
- * Save all images to the system, render them and available filters and set listeners
+ * Save all images to the system, render them and available filters and set listeners (if array of images aren't empty - otherwise render an empty page)
  * @param {{ id: number, url: string, large_url: string, source_id: number, copyright: string, site: string }[]} images An array that stores objects with images
  * @example
  * saveImages([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
  */
 export const onInitialized = (images) => {
-  activeFilter = 'showall';
-  allImages[activeFilter] = images;
+  if (images.length) {
+    activeFilter = 'showall';
+    allImages[activeFilter] = images;
 
-  renderImages(images);
-  filtersView.renderFilters(images);
+    renderImages(images);
+    filtersView.renderFilters(images);
 
-  setModalClick();
-  setButtonClick();
+    setModalClick();
+    setButtonClick();
+  } else {
+    renderEmptyPage();
+  }
 };
 
 /**
@@ -210,4 +214,17 @@ const isShowMoreButtonVisible = (toggle) => {
  */
 export const clearImage = () => {
   gallery.innerHTML = '';
+};
+
+/**
+ * Render a container for a blank page. Display a message and remove the buttons (show more and filters)
+ */
+const renderEmptyPage = () => {
+  const noData = `
+    <div class="gallery__empty">Brak danych (no data)</div>
+  `;
+
+  gallery.insertAdjacentHTML('beforeend', noData);
+  showMoreContainer.remove();
+  filtersView.filters.remove();
 };

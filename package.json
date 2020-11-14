@@ -2,7 +2,7 @@
   "name": "photo-gallery",
   "author": "Patryk Wylegala",
   "license": "MIT",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "main": "js/main.js",
   "scripts": {
     "build-dev": "webpack --mode development",

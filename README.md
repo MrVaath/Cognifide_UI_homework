@@ -81,6 +81,6 @@ Contact me via email
 
 **Language**: _HTML_, _CSS_, _JavaScript_
 
-**Version**: _3.0.1_
+**Version**: _3.0.2_
 
 **Year**: _2019_
