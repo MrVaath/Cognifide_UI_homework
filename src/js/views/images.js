@@ -1,6 +1,10 @@
 // IMPORTS //
-import * as filtersView from './filters';
-import * as loaderView from './loader';
+// Views
+import { renderFilters, removeFilters } from './filters';
+import { renderButton, removeButton, changeButtonState } from './button';
+
+// Shared
+import { container, gallery } from '../shared/elements';
 
 // VARIABLES //
 /**
@@ -23,66 +27,66 @@ let start = 0;
  */
 let limit = 10;
 
-/**
- * Container element
- */
-const container = document.querySelector('.container');
-
-/**
- * Gallery element
- */
-export const gallery = document.querySelector('.gallery');
-
-/**
- * Show more container
- */
-const showMoreContainer = document.querySelector('.show-more');
-
-/**
- * Show more button element
- */
-export const showMoreButton = document.querySelector('.show-more__button');
-
 // FUNCTIONS //
 /**
- * Save all images to the system, render them and available filters and set listeners (if array of images aren't empty - otherwise render an empty page)
+ * Save all images to the system, render them and all available filters (if array of images aren't empty - otherwise render an empty page)
  * @param {{ id: number, url: string, large_url: string, source_id: number, copyright: string, site: string }[]} images An array that stores objects with images
  * @example
- * saveImages([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
+ * onInitialized([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
  */
 export const onInitialized = (images) => {
+  // Clear gallery
+  clearGallery();
+
   if (images.length) {
+    // Set active filter and assign images
     activeFilter = 'showall';
     allImages[activeFilter] = images;
 
+    // Render filters and images
+    renderFilters(images);
     renderImages(images);
-    filtersView.renderFilters(images);
-
-    setModalClick();
-    setButtonClick();
   } else {
+    // Render an empty page
     renderEmptyPage();
   }
 };
 
 /**
- * Render a single image to HTML
+ * Render a single image to HTML and set event listener (click) to render modal with enlarge picture
  * @param {{ id: number, url: string, large_url: string, source_id: number, copyright: string, site: string }} image Object that stores the image data
  * @param {'small' | 'large'} imageSize Specifies the size of the image
  * @example
  * renderImage({ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, 'large');
  */
 const renderImage = (image, imageSize) => {
-  const imageHTML = `
-    <div id="${image.id}" class="gallery__image gallery__image--${imageSize}" data-large="${image.large_url}">
-      <div class="image__overlay">
-        <span class="overlay__text--${imageSize}">#${image.site}</span>
-      </div>
-      <img class="overlay__image--${imageSize}" src="${image.url}" />
+  // Create div conainer and image elements
+  const imageContainer = document.createElement('div');
+  const imageElements = `
+    <div class="image__overlay">
+      <span class="overlay__text--${imageSize}">#${image.site}</span>
     </div>
-  `;
+    <img src="${image.url}" />
+    `;
 
-  gallery.insertAdjacentHTML('beforeend', imageHTML);
+  // Add id, classes and event listener to image container
+  imageContainer.id = image.id;
+  imageContainer.classList.add(
+    'gallery__image',
+    `gallery__image--${imageSize}`
+  );
+  imageContainer.addEventListener('click', () => {
+    const imageURL = image.large_url ? image.large_url : image.url;
+
+    renderImageModal(imageURL);
+  });
+
+  // Append image container to gallery container (if exists)
+  imageContainer.insertAdjacentHTML('afterbegin', imageElements);
+
+  if (gallery) {
+    gallery.appendChild(imageContainer);
+  }
 };
 
 /**
@@ -92,12 +96,13 @@ const renderImage = (image, imageSize) => {
  * renderImages([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
  */
 const renderImages = (images) => {
+  // Get upper limit of rendering
   const newLimit = limit < images.length ? limit : images.length;
 
-  newLimit === images.length
-    ? isShowMoreButtonVisible(false)
-    : isShowMoreButtonVisible(true);
+  // Render or remove button depending on limit
+  newLimit === images.length ? removeButton() : renderButton();
 
+  // Render images from start to upper limit
   for (start; start < newLimit; start++) {
     // Check if is it a 5 or 9 picture to create large object (add different class)
     if (start % 10 === 4 || start % 10 === 8) {
@@ -114,117 +119,100 @@ const renderImages = (images) => {
 };
 
 /**
- * Render a single modal with enlarge picture
+ * Render a single modal with enlarge picture and set event listener (click) to close modal
  * @param {string} imageSrc Specifies the path to the image
  * @example
  * renderImageModal('https://splashbase.s3.amazonaws.com');
  */
 const renderImageModal = (imageSrc) => {
-  const imageModalHTML = `
-    <div class="modal">
-      <div class="modal__close">
-        <button class="fas fa-times close__button"></button>
-      </div>
-      <img class="modal__content" src="${imageSrc}">
+  // Create div conainer and modal elements
+  const modalContainer = document.createElement('div');
+  const modalElements = `
+    <div class="modal__close">
+      <button class="fas fa-times close__button"></button>
     </div>
+    <img class="modal__content" src="${imageSrc}">
   `;
 
-  container.insertAdjacentHTML('beforeend', imageModalHTML);
-
-  document.querySelector('.modal').addEventListener('click', (event) => {
+  // Add class and event listener to modal container
+  modalContainer.classList.add('modal');
+  modalContainer.addEventListener('click', (event) => {
     if (event.target.tagName !== 'IMG') {
-      event.target.closest('.modal').remove();
+      modalContainer.remove();
     }
   });
+
+  // Append modal container to main container (if exists)
+  modalContainer.insertAdjacentHTML('afterbegin', modalElements);
+
+  if (container) {
+    container.appendChild(modalContainer);
+  }
 };
 
 /**
- * Set photos click listener - render modal with single image
- */
-const setModalClick = () => {
-  gallery.addEventListener('click', (event) => {
-    const imageObj = event.target.closest('.gallery__image');
-    const imageURL =
-      imageObj.dataset.large !== 'null'
-        ? imageObj.dataset.large
-        : imageObj.children[1].src;
-
-    renderImageModal(imageURL);
-  });
-};
-
-/**
- * Render all images by filter transferred in the function
+ * Render all images depending on filter name
  * @param {string} filterName Specifies the name of the filter
  * @example
  * renderImagesByFilter('littlevisuals');
  */
 export const renderImagesByFilter = (filterName) => {
+  // Reset variables (including limit)
   start = 0;
   limit = 10;
 
+  // Change active filter name
   activeFilter = filterName;
 
+  // Filter images by image's site (if doesn't exists at object)
   if (!allImages[activeFilter]) {
     allImages[activeFilter] = allImages.showall.filter(
       (image) => image.site === activeFilter
     );
   }
 
-  clearImage();
+  // Clear gallery and render new images (by filter)
+  clearGallery();
   renderImages(allImages[activeFilter]);
 };
 
 /**
- * Render more results of images. Increase the limit and show loading button
+ * Render more results of images. Increase the limit and change button state
  */
-const renderMoreImage = () => {
+export const renderMoreImage = () => {
+  // Increase the limit by 10
   limit += 10;
-  loaderView.loadingButton();
 
+  // Change button to loading state
+  changeButtonState('loading');
+
+  // After 500 ms - render more images and change button to default state
   setTimeout(() => {
     renderImages(allImages[activeFilter]);
-    loaderView.clearLoadingButton();
+    changeButtonState('text');
   }, 500);
-};
-
-/**
- * Set show more button listener - render more images
- */
-const setButtonClick = () => {
-  showMoreButton.addEventListener('click', () => {
-    renderMoreImage();
-  });
-};
-
-/**
- * Change show more button visibility
- * @param {boolean} toggle Specifies button visibility
- * @example
- * isShowMoreButtonVisible(false);
- */
-const isShowMoreButtonVisible = (toggle) => {
-  const displayedStyle = toggle ? 'flex' : 'none';
-
-  showMoreContainer.setAttribute('style', `display: ${displayedStyle};`);
-};
-
-/**
- * Clear all gallery results (images)
- */
-export const clearImage = () => {
-  gallery.innerHTML = '';
 };
 
 /**
  * Render a container for a blank page. Display a message and remove the buttons (show more and filters)
  */
 const renderEmptyPage = () => {
+  // Create no data element
   const noData = `
     <div class="gallery__empty">Brak danych (no data)</div>
   `;
 
-  gallery.insertAdjacentHTML('beforeend', noData);
-  showMoreContainer.remove();
-  filtersView.filters.remove();
+  // Append no data element to gallery container (if exists) and remove buttons
+  if (gallery) {
+    gallery.insertAdjacentHTML('afterbegin', noData);
+    removeFilters();
+    removeButton();
+  }
+};
+
+/**
+ * Clear all gallery results (images)
+ */
+const clearGallery = () => {
+  gallery.innerHTML = '';
 };

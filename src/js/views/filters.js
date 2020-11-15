@@ -1,59 +1,74 @@
 // IMPORTS //
-import * as imagesView from './images';
+// Views
+import { renderImagesByFilter } from './images';
 
 // VARIABLES //
 /**
- * Header filters element
+ * Header filters container
  */
-export const filters = document.querySelector('.header__filters');
+const filters = document.querySelector('.header__filters');
+
+/**
+ * Specifies previous active filter name
+ */
+let previousActiveFilter = 'showall';
 
 // FUNCTIONS //
 /**
- * Render all available filters and add event listener to renders images by specifies filter
- * @param {{ id: number, url: string, large_url: string, source_id: number, copyright: string, site: string }[]} allImages An array that stores objects with images
- * @example
- * renderFilters([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
- */
-export const renderFilters = (allImages) => {
-  // Create temp Array
-  const filters = [];
-
-  // Push all filters from image to temp Array
-  allImages.forEach((image) => {
-    filters.push(image.site);
-  });
-
-  // Create Array with all filters without duplication
-  const allFilters = ['showall', ...new Set(filters)];
-
-  // Render a single filter and add listener - renders images by specifies filter
-  allFilters.forEach((filter) => {
-    renderFilter(filter);
-
-    document
-      .querySelector(`.filter__button.${filter}`)
-      .addEventListener('click', () => {
-        imagesView.renderImagesByFilter(filter);
-        changeActiveFilter(filter);
-      });
-  });
-
-  // Activate showall button
-  changeActiveFilter('showall');
-};
-
-/**
- * Render a single filter to HTML
+ * Render a single filter to HTML and set event listener (click) to render images by specifies filter and change active class
  * @param {string} filterName Specifies the name of the filter
  * @example
  * renderFilter('unsplash');
  */
 const renderFilter = (filterName) => {
-  const filterHTML = `
-    <button class="filter__button ${filterName}">${filterName}</button>
-  `;
+  // Create button element
+  const filterButton = document.createElement('button');
 
-  filters.insertAdjacentHTML('beforeend', filterHTML);
+  // Add attributes to element like id, class, innerHTML (text) with event listener
+  filterButton.id = filterName;
+  filterButton.classList.add('filter__button');
+  filterButton.innerHTML = filterName;
+  filterButton.addEventListener('click', () => {
+    if (previousActiveFilter !== filterName) {
+      previousActiveFilter = filterName;
+      renderImagesByFilter(filterName);
+      changeActiveFilter(filterName);
+    }
+  });
+
+  // Append button element to filters container (if exists)
+  if (filters) {
+    filters.appendChild(filterButton);
+  }
+};
+
+/**
+ * Render all available filters
+ * @param {{ id: number, url: string, large_url: string, source_id: number, copyright: string, site: string }[]} allImages An array that stores objects with images
+ * @example
+ * renderFilters([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
+ */
+export const renderFilters = (allImages) => {
+  // Create temp Array of all filters
+  const tempFilters = [];
+
+  // Push all available filters from image to temp Array
+  allImages.forEach((image) => {
+    if (image.site) {
+      tempFilters.push(image.site);
+    }
+  });
+
+  if (tempFilters.length) {
+    // Create Array with all filters without duplication
+    const allFilters = ['showall', ...new Set(tempFilters)];
+
+    // Render a single filter
+    allFilters.forEach(renderFilter);
+
+    // Activate showall button
+    changeActiveFilter('showall');
+  }
 };
 
 /**
@@ -63,13 +78,27 @@ const renderFilter = (filterName) => {
  * changeActiveFilter('showall');
  */
 const changeActiveFilter = (activeFilterName) => {
-  const activeFilter = document.querySelector('.filter__button.active');
+  // Get previous and current elements
+  const previousActive = document.querySelector('.filter__button.active');
+  const currentActive = document.getElementById(activeFilterName);
 
-  if (activeFilter) {
-    activeFilter.classList.remove('active');
+  // Remove active class
+  if (previousActive) {
+    previousActive.classList.remove('active');
   }
 
-  document
-    .querySelector(`.filter__button.${activeFilterName}`)
-    .classList.add('active');
+  // Add active class
+  if (currentActive) {
+    currentActive.classList.add('active');
+  }
+};
+
+/**
+ * Remove all filters and container from HTML
+ */
+export const removeFilters = () => {
+  // Remove element if exists
+  if (filters) {
+    filters.remove();
+  }
 };

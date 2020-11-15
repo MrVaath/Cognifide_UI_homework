@@ -30,6 +30,8 @@ This project was created as part of 'Cognifide' recruitment. It is a simple webs
   - Transitions and some animations (zoom and scale).
   - Added and configured webpack.
   - Added preprocessor and converted css to scss.
+  - Eliminated a lot of bugs and protected against unexpected errors. Now is rendered an empty page with proper message.
+  - Added toasts which displaying messages.
 
 ## Additionial
 
@@ -81,6 +83,6 @@ Contact me via email
 
 **Language**: _HTML_, _CSS_, _JavaScript_
 
-**Version**: _3.0.2_
+**Version**: _3.3.5_
 
 **Year**: _2019_

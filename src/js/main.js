@@ -1,7 +1,13 @@
 // IMPORTS //
+// Models
 import Images from './models/Images';
-import * as imagesView from './views/images';
-import * as loaderView from './views/loader';
+
+// Views
+import { onInitialized } from './views/images';
+import { renderLoader, removeLoader } from './views/loader';
+import { showError } from './views/toasts';
+
+// Styles
 import '../sass/style.scss';
 
 // VARIABLES //
@@ -15,9 +21,8 @@ const images = new Images();
  * Get all images from api and renders results on UI
  */
 const controlImages = async () => {
-  // Prepare UI for results - clearing and displaing loader
-  imagesView.clearImage();
-  loaderView.renderLoader();
+  // Prepare UI for results - displaing loader
+  renderLoader();
 
   try {
     // Try to get images data
@@ -26,12 +31,14 @@ const controlImages = async () => {
     // Create copy of all images
     const allImages = images && images.result ? images.result.slice() : [];
 
-    // Renders results on UI - 10 images and fillters (nav)
-    imagesView.onInitialized(allImages);
-    loaderView.clearLoader();
+    // Renders results on UI - clearing page, rendering 10 images and available fillters (nav), setting listeners and removing loader
+    onInitialized(allImages);
+    removeLoader();
   } catch (error) {
-    imagesView.onInitialized([]);
-    loaderView.clearLoader();
+    // Render empty page, remove loader and display error (toast)
+    onInitialized([]);
+    removeLoader();
+    showError(error);
 
     console.error(error);
   }

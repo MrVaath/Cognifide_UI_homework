@@ -1,5 +1,6 @@
 // IMPORTS //
-import { gallery, showMoreButton } from './images';
+// Shared
+import { gallery } from '../shared/elements';
 
 // VARIABLES //
 /**
@@ -9,9 +10,10 @@ const loaderType = 'lds-ring';
 
 // FUNCTIONS //
 /**
- * Render the loader
+ * Render a loader to HTML
  */
 export const renderLoader = () => {
+  // Create loader element
   const loader = `
     <div class="${loaderType}">
       <div></div>
@@ -21,30 +23,21 @@ export const renderLoader = () => {
     </div>
   `;
 
-  gallery.insertAdjacentHTML('beforeend', loader);
-};
-
-/**
- * Clear current loader
- */
-export const clearLoader = () => {
-  const loader = document.querySelector(`.${loaderType}`);
-
-  if (loader) {
-    loader.parentElement.removeChild(loader);
+  // Append loader element to gallery container (if exists)
+  if (gallery) {
+    gallery.insertAdjacentHTML('afterbegin', loader);
   }
 };
 
 /**
- * Change button to loading state (render loading)
+ * Remove current loader
  */
-export const loadingButton = () => {
-  showMoreButton.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
-};
+export const removeLoader = () => {
+  // Get loader element
+  const loader = document.querySelector(`.${loaderType}`);
 
-/**
- * Change button to default state (clear loading)
- */
-export const clearLoadingButton = () => {
-  showMoreButton.innerHTML = `<span>Show more</span>`;
+  // Remove loader
+  if (loader) {
+    loader.remove();
+  }
 };
