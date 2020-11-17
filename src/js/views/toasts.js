@@ -8,10 +8,16 @@ import { container } from '../shared/elements';
  * @param {ErrorEvent} error Error that occured
  */
 export const showError = (error) => {
+  // Render toast with error message if exists
   if (error && error.message) {
     renderToast('error', error.message, 2000);
   } else {
-    renderToast('error', JSON.stringify(error).substring(255), 2000);
+    // Render toast with all error
+    if (error === null || error === undefined) {
+      error = 'Null or undefined';
+    }
+
+    renderToast('error', JSON.stringify(error).substring(0, 255), 2000);
   }
 };
 
@@ -24,6 +30,16 @@ export const showError = (error) => {
  * renderToast('error', 'Network error', 2000);
  */
 const renderToast = (type, message, timeout) => {
+  // Secure rendering toast - type and timeout
+  if (type !== 'error' && type !== 'success') {
+    type = 'error';
+  }
+
+  if (typeof timeout !== 'number') {
+    timeout = 2000;
+  }
+
+  // Create div conainer and toast elements
   const toast = document.createElement('div');
   const messageContainer = `
     <div class="${type}">
@@ -31,8 +47,10 @@ const renderToast = (type, message, timeout) => {
     </div>
   `;
 
+  // Add class to toast container
   toast.classList.add('toast');
 
+  // Append elements to toast and toast container to main container (if exists). After timeout - remove toast
   toast.insertAdjacentHTML('afterbegin', messageContainer);
 
   if (container) {

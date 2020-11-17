@@ -31,7 +31,7 @@ export const renderButton = () => {
       renderMoreImage();
     });
 
-    // Append show more container to main container (if exists)
+    // Append button to container and show more container to main container (if exists)
     showMore.appendChild(showMoreButton);
 
     if (container) {

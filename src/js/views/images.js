@@ -38,7 +38,7 @@ export const onInitialized = (images) => {
   // Clear gallery
   clearGallery();
 
-  if (images.length) {
+  if (images && Array.isArray(images) && images.length) {
     // Set active filter and assign images
     activeFilter = 'showall';
     allImages[activeFilter] = images;
@@ -60,14 +60,19 @@ export const onInitialized = (images) => {
  * renderImage({ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, 'large');
  */
 const renderImage = (image, imageSize) => {
+  // Secure image object - if does not exists, create an empty object
+  if (!image) {
+    image = {};
+  }
+
   // Create div conainer and image elements
   const imageContainer = document.createElement('div');
   const imageElements = `
-    <div class="image__overlay">
-      <span class="overlay__text--${imageSize}">#${image.site}</span>
-    </div>
-    <img src="${image.url}" />
-    `;
+      <div class="image__overlay">
+        <span class="overlay__text--${imageSize}">#${image.site}</span>
+      </div>
+      <img src="${image.url}" />
+      `;
 
   // Add id, classes and event listener to image container
   imageContainer.id = image.id;
@@ -96,23 +101,38 @@ const renderImage = (image, imageSize) => {
  * renderImages([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
  */
 const renderImages = (images) => {
-  // Get upper limit of rendering
-  const newLimit = limit < images.length ? limit : images.length;
+  if (images && images.length) {
+    // Create new upper limit
+    let newLimit;
 
-  // Render or remove button depending on limit
-  newLimit === images.length ? removeButton() : renderButton();
-
-  // Render images from start to upper limit
-  for (start; start < newLimit; start++) {
-    // Check if is it a 5 or 9 picture to create large object (add different class)
-    if (start % 10 === 4 || start % 10 === 8) {
-      renderImage(images[start], 'large');
+    // Get upper limit of rendering and depending on it render or remove button
+    if (limit < images.length) {
+      newLimit = limit;
+      renderButton();
     } else {
-      renderImage(images[start], 'small');
+      newLimit = images.length;
+      removeButton();
+    }
 
-      // Check if is it a 8 or 10 picture to add mobile class (fix displaying on small screen)
-      if (start % 10 === 7 || start % 10 === 9) {
-        document.getElementById(`${images[start].id}`).classList.add('mobile');
+    // Render images from start to upper limit
+    for (start; start < newLimit; start++) {
+      const image = images[start];
+      // Check if is it a 5 or 9 picture to create large object (add different class)
+      if (start % 10 === 4 || start % 10 === 8) {
+        renderImage(image, 'large');
+      } else {
+        renderImage(image, 'small');
+
+        // Check if is it a 8 or 10 picture to add mobile class (fix displaying on small screen)
+        if (start % 10 === 7 || start % 10 === 9) {
+          if (image.id) {
+            const imageElement = document.getElementById(`${image.id}`);
+
+            if (imageElement) {
+              imageElement.classList.add('mobile');
+            }
+          }
+        }
       }
     }
   }
@@ -142,7 +162,7 @@ const renderImageModal = (imageSrc) => {
     }
   });
 
-  // Append modal container to main container (if exists)
+  // Append elements to modal and modal container to main container (if exists)
   modalContainer.insertAdjacentHTML('afterbegin', modalElements);
 
   if (container) {

@@ -10,6 +10,9 @@ import { showError } from './views/toasts';
 // Styles
 import '../sass/style.scss';
 
+// Strict mode
+('use strict');
+
 // VARIABLES //
 /**
  * Create new images object

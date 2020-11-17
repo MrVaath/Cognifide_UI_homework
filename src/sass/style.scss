@@ -296,11 +296,15 @@ body {
 }
 
 // OTHER //
-.modal__content,
-.modal__close,
+.modal,
 .gallery__image > img {
   animation-name: zoom-in;
   animation-duration: 0.6s;
+}
+
+.toast {
+  animation-name: fade-in;
+  animation-duration: 1s;
 }
 
 // RESPONSIVENESS //
@@ -435,6 +439,17 @@ body {
 
   to {
     transform: scale(1);
+  }
+}
+
+// FADE
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 

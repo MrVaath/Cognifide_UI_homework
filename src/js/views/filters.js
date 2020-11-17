@@ -49,25 +49,27 @@ const renderFilter = (filterName) => {
  * renderFilters([{ id: 114, url: 'https://splashbase.s3.amazonaws.com', ... }, { id: 294, url: 'https://splashbase.s3.amazonaws.com', ... }]);
  */
 export const renderFilters = (allImages) => {
-  // Create temp Array of all filters
-  const tempFilters = [];
+  if (allImages && Array.isArray(allImages) && allImages.length) {
+    // Create temp Array of all filters
+    const tempFilters = [];
 
-  // Push all available filters from image to temp Array
-  allImages.forEach((image) => {
-    if (image.site) {
-      tempFilters.push(image.site);
+    // Push all available filters from image to temp Array
+    allImages.forEach((image) => {
+      if (image.site) {
+        tempFilters.push(image.site);
+      }
+    });
+
+    if (tempFilters.length) {
+      // Create Array with all filters without duplication
+      const allFilters = ['showall', ...new Set(tempFilters)];
+
+      // Render a single filter
+      allFilters.forEach(renderFilter);
+
+      // Activate showall button
+      changeActiveFilter('showall');
     }
-  });
-
-  if (tempFilters.length) {
-    // Create Array with all filters without duplication
-    const allFilters = ['showall', ...new Set(tempFilters)];
-
-    // Render a single filter
-    allFilters.forEach(renderFilter);
-
-    // Activate showall button
-    changeActiveFilter('showall');
   }
 };
 
